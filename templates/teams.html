@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Teams</h1></div>
+<form method="GET" class="search-card">
+    <input name="q" value="{{ q }}" placeholder="Search team, city, or coach">
+    <button type="submit">Search</button>
+    <a class="btn-light" href="{{ url_for('teams') }}">Clear</a>
+</form>
+
+{% if admin_logged_in %}
+<form method="POST" class="form-card">
+    <input name="team_name" placeholder="Team Name" required>
+    <input name="city" placeholder="City">
+    <input name="coach_name" placeholder="Coach Name">
+    <button type="submit">Add Team</button>
+</form>
+{% endif %}
+
+<table>
+    <tr><th>ID</th><th>Team Name</th><th>City</th><th>Coach</th><th>Created At</th>{% if admin_logged_in %}<th>Action</th>{% endif %}</tr>
+    {% for team in teams %}
+    <tr><td>{{ team.team_id }}</td><td>{{ team.team_name }}</td><td>{{ team.city }}</td><td>{{ team.coach_name }}</td><td>{{ team.created_at }}</td>{% if admin_logged_in %}<td><form method="POST" action="{{ url_for('delete_item', entity='team', item_id=team.team_id) }}" onsubmit="return confirm('Delete this team?')"><button class="danger-btn" type="submit">Delete</button></form></td>{% endif %}</tr>
+    {% else %}<tr><td colspan="5">No teams found.</td></tr>{% endfor %}
+</table>
+{% endblock %}

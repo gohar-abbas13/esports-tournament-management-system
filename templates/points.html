@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>Points Table</h1>
+        <p class="muted">Win = 3 points, Loss = 0 points. Data is calculated from completed match scores.</p>
+    </div>
+</div>
+<table>
+    <tr><th>Tournament</th><th>Team</th><th>Played</th><th>Wins</th><th>Losses</th><th>Points</th></tr>
+    {% for p in points %}
+    <tr><td>{{ p.tournament_name }}</td><td>{{ p.team_name }}</td><td>{{ p.played }}</td><td>{{ p.wins }}</td><td>{{ p.losses }}</td><td><b>{{ p.points }}</b></td></tr>
+    {% else %}<tr><td colspan="6">No points available yet.</td></tr>{% endfor %}
+</table>
+{% endblock %}

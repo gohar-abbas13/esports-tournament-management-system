@@ -1,0 +1,30 @@
+digraph ERD {
+  graph [rankdir=LR, splines=ortho, nodesep=0.7, ranksep=1.0, bgcolor="white"];
+  node [shape=record, fontname="Arial", fontsize=10, style="rounded,filled", fillcolor="#f8f9ff", color="#283593"];
+  edge [fontname="Arial", fontsize=9, color="#333333"];
+
+  Teams [label="{Teams|PK team_id\lteam_name\lcity\lcoach_name\lcreated_at\l}"];
+  Players [label="{Players|PK player_id\lplayer_name\lgamer_tag\lemail\lphone\lcountry\ldate_of_birth\l}"];
+  TeamMembers [label="{TeamMembers|PK/FK team_id\lPK/FK player_id\lrole\ljoin_date\l}"];
+  Games [label="{Games|PK game_id\lgame_name\lgenre\lplatform\l}"];
+  Tournaments [label="{Tournaments|PK tournament_id\lFK game_id\ltournament_name\lstart_date\lend_date\lprize_pool\lstatus\l}"];
+  Registrations [label="{Registrations|PK registration_id\lFK tournament_id\lFK team_id\lregistration_date\lregistration_status\l}"];
+  Matches [label="{Matches|PK match_id\lFK tournament_id\lFK venue_id\lFK team1_id\lFK team2_id\lmatch_date\lround_name\lmatch_status\l}"];
+  MatchScores [label="{MatchScores|PK/FK match_id\lteam1_score\lteam2_score\lFK winner_team_id\lremarks\l}"];
+  Venues [label="{Venues|PK venue_id\lvenue_name\lcity\laddress\lcapacity\l}"];
+  Sponsors [label="{Sponsors|PK sponsor_id\lsponsor_name\lcontact_email\lphone\l}"];
+  TournamentSponsors [label="{TournamentSponsors|PK/FK tournament_id\lPK/FK sponsor_id\lsponsorship_amount\l}"];
+
+  Teams -> TeamMembers [label="1 to many"];
+  Players -> TeamMembers [label="1 to many"];
+  Games -> Tournaments [label="1 to many"];
+  Tournaments -> Registrations [label="1 to many"];
+  Teams -> Registrations [label="1 to many"];
+  Tournaments -> Matches [label="1 to many"];
+  Venues -> Matches [label="1 to many"];
+  Teams -> Matches [label="team1/team2"];
+  Matches -> MatchScores [label="1 to 0..1"];
+  Teams -> MatchScores [label="winner"];
+  Tournaments -> TournamentSponsors [label="1 to many"];
+  Sponsors -> TournamentSponsors [label="1 to many"];
+}

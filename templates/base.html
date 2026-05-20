@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSports Tournament Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="brand">🎮 eSports Tournament System</div>
+        <div class="links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('teams') }}">Teams</a>
+            <a href="{{ url_for('players') }}">Players</a>
+            <a href="{{ url_for('tournaments') }}">Tournaments</a>
+            <a href="{{ url_for('matches') }}">Matches</a>
+            <a href="{{ url_for('scores') }}">Scores</a>
+            <a href="{{ url_for('points') }}">Points Table</a>
+            <a href="{{ url_for('registrations') }}">Registrations</a>
+            <a href="{{ url_for('sponsors') }}">Sponsors</a>
+            <a href="{{ url_for('reports') }}">Reports</a>
+            {% if admin_logged_in %}
+                <a class="login-pill" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a class="login-pill" href="{{ url_for('login') }}">Admin Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">Database Project | MySQL + Python Flask + HTML/CSS</footer>
+</body>
+</html>

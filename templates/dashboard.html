@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+    <div>
+        <h1>Admin Dashboard</h1>
+        <p class="muted">Overview of teams, players, tournaments, matches, and results.</p>
+    </div>
+    {% if admin_logged_in %}<span class="badge success-badge">Admin Mode Active</span>{% else %}<span class="badge">View Mode</span>{% endif %}
+</div>
+
+<div class="cards six">
+    <div class="card"><h2>{{ stats.teams }}</h2><p>Total Teams</p></div>
+    <div class="card"><h2>{{ stats.players }}</h2><p>Total Players</p></div>
+    <div class="card"><h2>{{ stats.tournaments }}</h2><p>Tournaments</p></div>
+    <div class="card"><h2>{{ stats.matches }}</h2><p>Total Matches</p></div>
+    <div class="card"><h2>{{ stats.completed }}</h2><p>Completed Matches</p></div>
+    <div class="card"><h2>{{ stats.upcoming }}</h2><p>Upcoming Matches</p></div>
+</div>
+
+<section class="panel">
+    <h2>Top Points Table</h2>
+    <table>
+        <tr><th>Tournament</th><th>Team</th><th>Played</th><th>Wins</th><th>Losses</th><th>Points</th></tr>
+        {% for p in top_points %}
+        <tr><td>{{ p.tournament_name }}</td><td>{{ p.team_name }}</td><td>{{ p.played }}</td><td>{{ p.wins }}</td><td>{{ p.losses }}</td><td><b>{{ p.points }}</b></td></tr>
+        {% else %}<tr><td colspan="6">No points available yet.</td></tr>{% endfor %}
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Upcoming Tournaments</h2>
+    <table>
+        <tr><th>Name</th><th>Game</th><th>Start</th><th>End</th><th>Status</th></tr>
+        {% for t in tournaments %}
+        <tr><td>{{ t.tournament_name }}</td><td>{{ t.game_name }}</td><td>{{ t.start_date }}</td><td>{{ t.end_date }}</td><td><span class="badge">{{ t.status }}</span></td></tr>
+        {% else %}<tr><td colspan="5">No tournaments found.</td></tr>{% endfor %}
+    </table>
+</section>
+
+<section class="panel">
+    <h2>Recent Match Results</h2>
+    <table>
+        <tr><th>Tournament</th><th>Team 1</th><th>Team 2</th><th>Score</th><th>Winner</th></tr>
+        {% for m in matches %}
+        <tr><td>{{ m.tournament_name }}</td><td>{{ m.team1 }}</td><td>{{ m.team2 }}</td><td>{{ m.team1_score if m.team1_score is not none else '-' }} - {{ m.team2_score if m.team2_score is not none else '-' }}</td><td>{{ m.winner or 'Not decided' }}</td></tr>
+        {% else %}<tr><td colspan="5">No matches found.</td></tr>{% endfor %}
+    </table>
+</section>
+{% endblock %}

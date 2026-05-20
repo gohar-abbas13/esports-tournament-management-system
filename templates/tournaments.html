@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Tournaments</h1></div>
+<form method="GET" class="search-card">
+    <input name="q" value="{{ q }}" placeholder="Search tournament, game, or status">
+    <button type="submit">Search</button>
+    <a class="btn-light" href="{{ url_for('tournaments') }}">Clear</a>
+</form>
+
+{% if admin_logged_in %}
+<form method="POST" class="form-card grid-form">
+    <input name="tournament_name" placeholder="Tournament Name" required>
+    <select name="game_id" required>
+        <option value="">Select Game</option>
+        {% for g in games %}<option value="{{ g.game_id }}">{{ g.game_name }}</option>{% endfor %}
+    </select>
+    <input name="start_date" type="date" required>
+    <input name="end_date" type="date" required>
+    <input name="prize_pool" type="number" min="0" step="0.01" placeholder="Prize Pool">
+    <select name="status">
+        <option>Upcoming</option><option>Ongoing</option><option>Completed</option><option>Cancelled</option>
+    </select>
+    <button type="submit">Add Tournament</button>
+</form>
+{% endif %}
+
+<table>
+    <tr><th>ID</th><th>Name</th><th>Game</th><th>Start</th><th>End</th><th>Prize Pool</th><th>Status</th>{% if admin_logged_in %}<th>Action</th>{% endif %}</tr>
+    {% for t in tournaments %}
+    <tr><td>{{ t.tournament_id }}</td><td>{{ t.tournament_name }}</td><td>{{ t.game_name }}</td><td>{{ t.start_date }}</td><td>{{ t.end_date }}</td><td>{{ t.prize_pool }}</td><td><span class="badge">{{ t.status }}</span></td>{% if admin_logged_in %}<td><form method="POST" action="{{ url_for('delete_item', entity='tournament', item_id=t.tournament_id) }}" onsubmit="return confirm('Delete this tournament? Related matches may also be deleted.')"><button class="danger-btn" type="submit">Delete</button></form></td>{% endif %}</tr>
+    {% else %}<tr><td colspan="7">No tournaments found.</td></tr>{% endfor %}
+</table>
+{% endblock %}

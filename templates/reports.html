@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Reports & Exports</h1></div>
+
+<div class="cards">
+    <a class="stat-card export-card" href="{{ url_for('export_report', report_name='players') }}"><h3>Players CSV</h3><p>Download player records</p></a>
+    <a class="stat-card export-card" href="{{ url_for('export_report', report_name='teams') }}"><h3>Teams CSV</h3><p>Download team records</p></a>
+    <a class="stat-card export-card" href="{{ url_for('export_report', report_name='tournaments') }}"><h3>Tournaments CSV</h3><p>Download tournament list</p></a>
+    <a class="stat-card export-card" href="{{ url_for('export_report', report_name='matches') }}"><h3>Matches CSV</h3><p>Download match results</p></a>
+    <a class="stat-card export-card" href="{{ url_for('export_report', report_name='points') }}"><h3>Points CSV</h3><p>Download standings</p></a>
+</div>
+
+<h2>Tournament Summary Report</h2>
+<table>
+    <tr><th>Tournament</th><th>Game</th><th>Status</th><th>Registered Teams</th><th>Total Matches</th><th>Completed</th><th>Prize Pool</th></tr>
+    {% for r in tournament_summary %}
+    <tr><td>{{ r.tournament_name }}</td><td>{{ r.game_name }}</td><td><span class="badge">{{ r.status }}</span></td><td>{{ r.registered_teams }}</td><td>{{ r.total_matches }}</td><td>{{ r.completed_matches or 0 }}</td><td>{{ r.prize_pool }}</td></tr>
+    {% else %}<tr><td colspan="7">No report data found.</td></tr>{% endfor %}
+</table>
+
+<h2>Recent Results Report</h2>
+<table>
+    <tr><th>Tournament</th><th>Game</th><th>Teams</th><th>Score</th><th>Winner</th><th>Date</th></tr>
+    {% for m in recent_results %}
+    <tr><td>{{ m.tournament_name }}</td><td>{{ m.game_name }}</td><td>{{ m.team1 }} vs {{ m.team2 }}</td><td>{{ m.team1_score if m.team1_score is not none else '-' }} - {{ m.team2_score if m.team2_score is not none else '-' }}</td><td>{{ m.winner or 'Pending' }}</td><td>{{ m.match_date }}</td></tr>
+    {% else %}<tr><td colspan="6">No recent results found.</td></tr>{% endfor %}
+</table>
+{% endblock %}

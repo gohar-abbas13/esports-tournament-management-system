@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Players</h1></div>
+<form method="GET" class="search-card">
+    <input name="q" value="{{ q }}" placeholder="Search player, gamer tag, email, or country">
+    <button type="submit">Search</button>
+    <a class="btn-light" href="{{ url_for('players') }}">Clear</a>
+</form>
+
+{% if admin_logged_in %}
+<form method="POST" class="form-card grid-form">
+    <input name="player_name" placeholder="Player Name" required>
+    <input name="gamer_tag" placeholder="Gamer Tag" required>
+    <input name="email" placeholder="Email">
+    <input name="phone" placeholder="Phone">
+    <input name="country" placeholder="Country" value="Pakistan">
+    <input name="date_of_birth" type="date">
+    <button type="submit">Add Player</button>
+</form>
+{% endif %}
+
+<table>
+    <tr><th>ID</th><th>Name</th><th>Gamer Tag</th><th>Email</th><th>Phone</th><th>Country</th>{% if admin_logged_in %}<th>Action</th>{% endif %}</tr>
+    {% for p in players %}
+    <tr><td>{{ p.player_id }}</td><td>{{ p.player_name }}</td><td>{{ p.gamer_tag }}</td><td>{{ p.email }}</td><td>{{ p.phone }}</td><td>{{ p.country }}</td>{% if admin_logged_in %}<td><form method="POST" action="{{ url_for('delete_item', entity='player', item_id=p.player_id) }}" onsubmit="return confirm('Delete this player?')"><button class="danger-btn" type="submit">Delete</button></form></td>{% endif %}</tr>
+    {% else %}<tr><td colspan="6">No players found.</td></tr>{% endfor %}
+</table>
+{% endblock %}

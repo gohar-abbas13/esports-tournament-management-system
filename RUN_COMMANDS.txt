@@ -1,0 +1,39 @@
+1) Open terminal in the project folder:
+cd ~/Desktop/'DATABASE PROJECT'/db_project
+
+2) Activate virtual environment:
+source venv/bin/activate
+
+3) Install requirements:
+pip install -r requirements.txt
+
+4) Make sure .env contains your MariaDB user:
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=esports_user
+DB_PASSWORD=12345
+DB_NAME=esports_tournament_db
+SECRET_KEY=change-this-secret-key
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
+
+5) Run the app:
+python app.py
+
+6) Open browser:
+http://127.0.0.1:5000
+
+Admin login:
+username: admin
+password: admin123
+
+If you need to create the database user again:
+sudo mariadb
+CREATE USER IF NOT EXISTS 'esports_user'@'localhost' IDENTIFIED BY '12345';
+GRANT ALL PRIVILEGES ON esports_tournament_db.* TO 'esports_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+Extra final version features:
+- Open /reports for reports and CSV exports.
+- Login as admin before using delete actions.

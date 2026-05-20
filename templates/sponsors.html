@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Sponsors</h1>
+<table>
+    <tr><th>Tournament</th><th>Sponsor</th><th>Amount</th></tr>
+    {% for s in sponsors %}
+    <tr><td>{{ s.tournament_name }}</td><td>{{ s.sponsor_name }}</td><td>{{ s.sponsorship_amount }}</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

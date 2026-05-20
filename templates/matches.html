@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Matches</h1></div>
+<form method="GET" class="search-card">
+    <input name="q" value="{{ q }}" placeholder="Search tournament, game, team, winner, or round">
+    <button type="submit">Search</button>
+    <a class="btn-light" href="{{ url_for('matches') }}">Clear</a>
+</form>
+
+{% if admin_logged_in %}
+<form method="POST" class="form-card grid-form">
+    <select name="tournament_id" required>
+        <option value="">Select Tournament</option>
+        {% for t in tournaments_list %}<option value="{{ t.tournament_id }}">{{ t.tournament_name }}</option>{% endfor %}
+    </select>
+    <select name="team1_id" required>
+        <option value="">Team 1</option>
+        {% for team in teams_list %}<option value="{{ team.team_id }}">{{ team.team_name }}</option>{% endfor %}
+    </select>
+    <select name="team2_id" required>
+        <option value="">Team 2</option>
+        {% for team in teams_list %}<option value="{{ team.team_id }}">{{ team.team_name }}</option>{% endfor %}
+    </select>
+    <select name="venue_id">
+        <option value="">Venue / Online</option>
+        {% for v in venues_list %}<option value="{{ v.venue_id }}">{{ v.venue_name }}</option>{% endfor %}
+    </select>
+    <input name="match_date" type="datetime-local" required>
+    <input name="round_name" placeholder="Round Name" value="Round 1">
+    <select name="match_status"><option>Scheduled</option><option>Completed</option><option>Cancelled</option></select>
+    <button type="submit">Schedule Match</button>
+</form>
+{% endif %}
+
+<table>
+    <tr><th>ID</th><th>Tournament</th><th>Game</th><th>Teams</th><th>Score</th><th>Winner</th><th>Date</th><th>Round</th><th>Venue</th>{% if admin_logged_in %}<th>Action</th>{% endif %}</tr>
+    {% for m in matches %}
+    <tr>
+        <td>{{ m.match_id }}</td><td>{{ m.tournament_name }}</td><td>{{ m.game_name }}</td>
+        <td>{{ m.team1 }} vs {{ m.team2 }}</td><td>{{ m.team1_score if m.team1_score is not none else '-' }} - {{ m.team2_score if m.team2_score is not none else '-' }}</td>
+        <td>{{ m.winner or 'Pending' }}</td><td>{{ m.match_date }}</td><td>{{ m.round_name }}</td><td>{{ m.venue_name or 'TBA' }}</td>{% if admin_logged_in %}<td><form method="POST" action="{{ url_for('delete_item', entity='match', item_id=m.match_id) }}" onsubmit="return confirm('Delete this match?')"><button class="danger-btn" type="submit">Delete</button></form></td>{% endif %}
+    </tr>
+    {% else %}<tr><td colspan="9">No matches found.</td></tr>{% endfor %}
+</table>
+{% endblock %}

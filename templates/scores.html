@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head"><h1>Record Match Scores</h1></div>
+{% if admin_logged_in %}
+<form method="POST" class="form-card grid-form">
+    <select name="match_id" required>
+        <option value="">Select Match</option>
+        {% for m in matches_list %}
+        <option value="{{ m.match_id }}">#{{ m.match_id }} - {{ m.tournament_name }}: {{ m.team1 }} vs {{ m.team2 }}</option>
+        {% endfor %}
+    </select>
+    <input name="team1_score" type="number" min="0" placeholder="Team 1 Score" required>
+    <input name="team2_score" type="number" min="0" placeholder="Team 2 Score" required>
+    <input name="remarks" placeholder="Remarks">
+    <button type="submit">Save Score</button>
+</form>
+{% else %}
+<p class="muted">Login as admin to record or update match scores.</p>
+{% endif %}
+
+<table>
+    <tr><th>Match</th><th>Tournament</th><th>Teams</th><th>Score</th><th>Winner</th><th>Date</th></tr>
+    {% for r in results %}
+    <tr><td>#{{ r.match_id }}</td><td>{{ r.tournament_name }}</td><td>{{ r.team1 }} vs {{ r.team2 }}</td><td>{{ r.team1_score if r.team1_score is not none else '-' }} - {{ r.team2_score if r.team2_score is not none else '-' }}</td><td>{{ r.winner or 'Pending' }}</td><td>{{ r.match_date }}</td></tr>
+    {% else %}<tr><td colspan="6">No results found.</td></tr>{% endfor %}
+</table>
+{% endblock %}

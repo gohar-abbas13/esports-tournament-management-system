@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Registrations</h1>
+<table>
+    <tr><th>ID</th><th>Tournament</th><th>Team</th><th>Status</th><th>Date</th></tr>
+    {% for r in registrations %}
+    <tr><td>{{ r.registration_id }}</td><td>{{ r.tournament_name }}</td><td>{{ r.team_name }}</td><td>{{ r.registration_status }}</td><td>{{ r.registration_date }}</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
